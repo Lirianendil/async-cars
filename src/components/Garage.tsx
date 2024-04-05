@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import CarForm from '../components/carForm';
 import CarUpdateForm from '../components/CarUpdateForm';
-import '../components/СarUpdate.css';
-
-
+import CarList from '../components/CarList';
+import './СarUpdate.css'
 
 interface Car {
     id: number;
@@ -14,6 +13,13 @@ interface Car {
 const Garage: React.FC = () => {
     const [cars, setCars] = useState<Car[]>([]);
     const [editingCar, setEditingCar] = useState<Car | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const carsPerPage = 7;
+
+    const pageCount = Math.ceil(cars.length / carsPerPage);
+    const indexOfLastCar = currentPage * carsPerPage;
+    const indexOfFirstCar = indexOfLastCar - carsPerPage;
+    const currentCars = cars.slice(indexOfFirstCar, indexOfLastCar);
 
     const addNewCar = (newCar: Omit<Car, 'id'>) => {
         const maxId = cars.reduce((max, car) => Math.max(max, car.id), 0);
@@ -27,31 +33,17 @@ const Garage: React.FC = () => {
         setEditingCar(null);
     };
 
-
-    const getRandomColor = () => {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
+    const changePage = (newPage: number) => {
+        if (newPage >= 1 && newPage <= pageCount) {
+            setCurrentPage(newPage);
         }
-        return color;
     };
-
-
-    const getRandomName = () => {
-        const makes = ['Tesla', 'BMW', 'Mercedes', 'Ford', 'Chevy', 'Audi', 'Toyota'];
-        const models = ['Model S', '3 Series', 'C-Class', 'Focus', 'Camaro', 'A4', 'Camry'];
-        const make = makes[Math.floor(Math.random() * makes.length)];
-        const model = models[Math.floor(Math.random() * models.length)];
-        return `${make} ${model}`;
-    };
-
 
     const generateRandomCars = () => {
         const randomCars = Array.from({ length: 100 }, (_, index) => ({
-            id: Date.now() + index, // Простой способ генерации уникальных ID
-            name: getRandomName(),
-            color: getRandomColor(),
+            id: Date.now() + index,
+            name: `Car ${index}`,
+            color: `#${Math.floor(Math.random()*16777215).toString(16)}`,
         }));
 
         setCars(randomCars);
@@ -61,13 +53,12 @@ const Garage: React.FC = () => {
         <div>
             <CarForm addNewCar={addNewCar} />
             <button onClick={generateRandomCars}>Generate 100 Random Cars</button>
-            {cars.map((car) => (
-                <div key={car.id}>
-                    {car.name} - <span style={{ color: car.color }}>{car.color}</span>
-                    <button onClick={() => setEditingCar(car)}>Edit</button>
-                    <button onClick={() => {/* Здесь будет функция удаления */}}>Remove</button>
-                </div>
-            ))}
+            <CarList cars={currentCars} />
+            <div className="pagination">
+                <button disabled={currentPage === 1} onClick={() => changePage(currentPage - 1)}>Prev</button>
+                <span>Page {currentPage} of {pageCount}</span>
+                <button disabled={currentPage === pageCount} onClick={() => changePage(currentPage + 1)}>Next</button>
+            </div>
             {editingCar && (
                 <CarUpdateForm
                     car={editingCar}
@@ -81,4 +72,3 @@ const Garage: React.FC = () => {
 };
 
 export default Garage;
-

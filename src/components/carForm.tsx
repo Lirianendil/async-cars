@@ -27,7 +27,7 @@ const CarForm: React.FC<CarFormProps> = ({ addNewCar }) => {
             });
             if (response.ok) {
                 const newCar: Car = await response.json();
-                addNewCar(newCar); // Using the addNewCar prop to add the car to the garage state
+                addNewCar(newCar);
                 setName('');
                 setColor('');
             }

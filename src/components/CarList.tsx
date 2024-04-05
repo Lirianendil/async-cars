@@ -1,18 +1,20 @@
+// CarList.tsx
 import React from 'react';
-import { Car } from './types'; // Убедитесь, что интерфейс Car импортируется из правильного места
+import CarItem from './CarItem';
+import { Car } from './types';
 
-interface CarItemProps {
-    car: Car;
+interface CarListProps {
+    cars: Car[];
 }
 
-const CarItem: React.FC<CarItemProps> = ({ car }) => {
+const CarList: React.FC<CarListProps> = ({ cars }) => {
     return (
-        <div className="car-item">
-            <span>{car.name}</span>
-            <div className="car-color" style={{ backgroundColor: car.color }}></div>
-            {/* Здесь могут быть кнопки для редактирования и удаления */}
+        <div>
+            {cars.map(car => (
+                <CarItem key={car.id} car={car} />
+            ))}
         </div>
     );
 };
 
-export default CarItem;
+export default CarList;

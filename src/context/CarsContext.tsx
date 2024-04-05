@@ -28,7 +28,7 @@ const Car: React.FC<Props> = ({ car, onUpdate, onRemove }) => {
                 <button className="button button-edit" onClick={() => onUpdate(car.id)}>Update</button>
                 <button className="button" onClick={() => onRemove(car.id)}>Remove</button>
                 <button className="button" onClick={handleStart}>Start Engine</button>
-                {/* Предполагаемое место для кнопки "Stop Engine" */}
+                {/*"Stop Engine" */}
                 {/* <button className="button" onClick={handleStop}>Stop Engine</button> */}
             </div>
         </div>

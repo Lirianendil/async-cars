@@ -1,6 +1,6 @@
 import React, {useEffect , useState } from 'react';
 import '../components/СarUpdate.css'
-// The Car interface as defined previously
+
 interface Car {
     id: number;
     name: string;
@@ -19,7 +19,6 @@ const CarUpdateForm: React.FC<CarUpdateFormProps> = ({ car, show, onClose, updat
     const [color, setColor] = useState(car.color);
 
     useEffect(() => {
-        // Whenever the selected car changes, update the form state
         setName(car.name);
         setColor(car.color);
     }, [car]);
@@ -29,7 +28,6 @@ const CarUpdateForm: React.FC<CarUpdateFormProps> = ({ car, show, onClose, updat
 
         const updatedCar = { ...car, name, color };
 
-        // Call to API to update the car on the server
         const response = await fetch(`http://localhost:3000/garage/${car.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -38,9 +36,7 @@ const CarUpdateForm: React.FC<CarUpdateFormProps> = ({ car, show, onClose, updat
 
         if (response.ok) {
             const result = await response.json();
-            // If the update is successful, update the car list in the parent component
             updateCarList(result);
-            // Close the form
             onClose();
         } else {
             console.error('Failed to update the car');
