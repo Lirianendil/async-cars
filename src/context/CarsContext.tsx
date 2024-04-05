@@ -1,6 +1,7 @@
 import React from 'react';
 import { Car as CarType } from '../components/types';
 import { startEngine } from '../api/api';
+import '../components/СarUpdate.css'
 
 interface Props {
     car: CarType;
@@ -19,15 +20,17 @@ const Car: React.FC<Props> = ({ car, onUpdate, onRemove }) => {
         }
     };
 
-
     return (
         <div>
             <h2>{car.name}</h2>
             <div style={{ backgroundColor: car.color }}>Color Display</div>
-            <button onClick={() => onUpdate(car.id)}>Edit</button>
-            <button onClick={() => onRemove(car.id)}>Remove</button>
-            <button onClick={handleStart}>Start Engine</button>
-            {/* Add Stop Engine button and handleStop function */}
+            <div className="button-container">
+                <button className="button button-edit" onClick={() => onUpdate(car.id)}>Update</button>
+                <button className="button" onClick={() => onRemove(car.id)}>Remove</button>
+                <button className="button" onClick={handleStart}>Start Engine</button>
+                {/* Предполагаемое место для кнопки "Stop Engine" */}
+                {/* <button className="button" onClick={handleStop}>Stop Engine</button> */}
+            </div>
         </div>
     );
 };

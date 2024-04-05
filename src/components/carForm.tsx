@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../components/СarUpdate.css'
 
 interface Car {
     name: string;
@@ -49,9 +50,12 @@ const CarForm: React.FC<CarFormProps> = ({ addNewCar }) => {
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
             />
-            <button type="submit">Add Car</button>
+            <div className="button-container">
+                <button className="button button-create" type="submit">Create</button>
+            </div>
         </form>
     );
+
 };
 
 export default CarForm;
