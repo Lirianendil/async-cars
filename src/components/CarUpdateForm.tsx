@@ -1,5 +1,5 @@
 import React, {useEffect , useState } from 'react';
-
+import '../components/СarUpdate.css'
 // The Car interface as defined previously
 interface Car {
     id: number;

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Garage from './components/Garage';
 import Winners from './components/Winners';
 
+
 const App = () => {
     return (
         <Router>
@@ -15,4 +16,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default App
