@@ -1,4 +1,3 @@
-// CarList.tsx
 import React from 'react';
 import CarItem from './CarItem';
 import { Car } from './types';

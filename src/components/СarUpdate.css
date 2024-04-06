@@ -43,11 +43,38 @@
 
 .centered-container {
     display: flex;
-    justify-content: center; /* Центрирует содержимое по горизонтали */
-    align-items: center; /* Центрирует содержимое по вертикали */
-    height: 100vh; /* Высота контейнера равна 100% от высоты окна просмотра */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .centered-title {
-    /* Стили для заголовка, если нужно */
+    /* Стили для заголовка*/
+}
+
+@keyframes moveCar {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+.car-moving {
+    animation: moveCar 3s linear forwards;
+
+}
+.engine-animation {
+    animation: engine-Animation 1s infinite;
+}
+
+@media (max-width: 500px) {
+    .engine-animation {
+        animation: none;
+    }
+}
+.car-svg {
+    width: 100px;
+    height: auto;
 }

@@ -18,3 +18,7 @@ export interface EngineResponse {
 export interface DriveStatus {
     success: boolean;
 }
+export interface StopEngineResponse {
+    success: boolean;
+    message?: string;
+}

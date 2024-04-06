@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CarForm from '../components/carForm';
 import CarUpdateForm from '../components/CarUpdateForm';
 import CarList from '../components/CarList';
-import './СarUpdate.css'
-
-interface Car {
-    id: number;
-    name: string;
-    color: string;
-}
+import { getCars } from '../api/api';
+import './СarUpdate.css';
+import {Car} from "./types";
 
 const Garage: React.FC = () => {
     const [cars, setCars] = useState<Car[]>([]);
     const [editingCar, setEditingCar] = useState<Car | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const carsPerPage = 7;
+
+    useEffect(() => {
+        const fetchCars = async () => {
+            try {
+                const carsData = await getCars(currentPage);
+                setCars(carsData);
+            } catch (error) {
+                console.error('Failed to fetch cars:', error);
+            }
+        };
+
+        fetchCars();
+    }, [currentPage]);
 
     const pageCount = Math.ceil(cars.length / carsPerPage);
     const indexOfLastCar = currentPage * carsPerPage;
@@ -40,11 +49,20 @@ const Garage: React.FC = () => {
     };
 
     const generateRandomCars = () => {
-        const randomCars = Array.from({ length: 100 }, (_, index) => ({
-            id: Date.now() + index,
-            name: `Car ${index}`,
-            color: `#${Math.floor(Math.random()*16777215).toString(16)}`,
-        }));
+        const brands = ['Tesla', 'BMW', 'Mercedes', 'Ford', 'Chevrolet', 'Audi', 'Toyota'];
+
+        const getRandomColor = () => {
+            return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+        };
+
+        const randomCars = Array.from({ length: 100 }, (_, index) => {
+            const brand = brands[Math.floor(Math.random() * brands.length)];
+            return {
+                id: Date.now() + index,
+                name: `${brand}`,
+                color: getRandomColor(),
+            };
+        });
 
         setCars(randomCars);
     };

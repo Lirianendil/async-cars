@@ -1,7 +1,7 @@
-import React from "react";
+    import React from "react";
 
-const Winners = () => {
-return <div>Winners component</div>;
-};
+    const Winners = () => {
+    return <div>Winners component</div>;
+    };
 
-export default Winners;
+    export default Winners;

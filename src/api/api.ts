@@ -1,4 +1,3 @@
-// api.ts
 import axios from 'axios';
 import { Car, Winner, EngineResponse, DriveStatus } from '../components/types';
 

@@ -14,6 +14,9 @@ export const addCarAPI = async (car: Car) => {
     if (!response.ok) {
         throw new Error('Произошла ошибка при добавлении машины');
     }
+    if (!response.headers.get('Content-Type')?.includes('application/json')) {
+        throw new Error(await response.text());
+    }
 
     return await response.json();
 };

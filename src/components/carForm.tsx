@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import '../components/СarUpdate.css'
 
 
+
 interface Car {
+    id: number;
     name: string;
     color: string;
 }
-
 interface CarFormProps {
     addNewCar: (newCar: Car) => void;
 }
