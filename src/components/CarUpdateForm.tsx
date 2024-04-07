@@ -1,11 +1,6 @@
-import React, {useEffect , useState } from 'react';
-import '../components/СarUpdate.css'
-
-interface Car {
-    id: number;
-    name: string;
-    color: string;
-}
+import React, { useEffect, useState } from 'react';
+import '../components/СarUpdate.css';
+import { Car } from './types';
 
 interface CarUpdateFormProps {
     car: Car;
@@ -35,7 +30,7 @@ const CarUpdateForm: React.FC<CarUpdateFormProps> = ({ car, show, onClose, updat
         });
 
         if (response.ok) {
-            const result = await response.json();
+            const result: Car = await response.json(); // Assuming the response is the updated car object
             updateCarList(result);
             onClose();
         } else {

@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import CarForm from '../components/carForm';
 import CarUpdateForm from '../components/CarUpdateForm';
 import CarList from '../components/CarList';
-import { getCars } from '../api/api';
+import { getCars, startRace, resetRace } from '../api/api';
 import './СarUpdate.css';
-import {Car} from "./types";
+import { Car } from "./types";
+import { ResetButton } from './ResetButton';
+import { RaceButton } from "./RaceButton";
 
 const Garage: React.FC = () => {
     const [cars, setCars] = useState<Car[]>([]);
@@ -61,14 +63,34 @@ const Garage: React.FC = () => {
                 id: Date.now() + index,
                 name: `${brand}`,
                 color: getRandomColor(),
+                speed: 0 // Add a default value for speed to fix the TypeScript error
             };
         });
 
         setCars(randomCars);
     };
 
+    const handleStartRace = async () => {
+        try {
+            const speed = 100; // Example speed, adjust as needed
+            await startRace(speed);
+        } catch (error) {
+            console.error('Failed to start race:', error);
+        }
+    };
+
+    const handleResetRace = async () => {
+        try {
+            await resetRace(); // Call the resetRace function
+        } catch (error) {
+            console.error('Failed to reset race:', error);
+        }
+    };
+
     return (
         <div>
+            <ResetButton onReset={handleResetRace} />
+            <RaceButton onStartRace={handleStartRace} cars={currentCars} />
             <CarForm addNewCar={addNewCar} />
             <button onClick={generateRandomCars}>Generate 100 Random Cars</button>
             <CarList cars={currentCars} />

@@ -50,19 +50,21 @@ const CarItem: React.FC<CarItemProps> = ({ car }) => {
     };
 
     return (
-        <div className={`car-item ${engineStatus === 'driving' ? 'car-moving' : ''}`}>
-            <CarComponent color={car.color} />
-            <div>
+        <div>
+            <div className={`car-item ${engineStatus === 'driving' ? 'car-moving' : ''}`}>
+                <CarComponent color={car.color} />
+            </div>
+            <div className="buttons-container">
                 <button
                     onClick={() => handleEngineAction('started')}
                     disabled={engineStatus !== 'stopped'}>
-                    Start Engine
+                    A
                 </button>
 
                 <button
                     onClick={() => handleEngineAction('stop')}
                     disabled={engineStatus === 'stopped'}>
-                    Stop Engine
+                    B
                 </button>
             </div>
         </div>
@@ -70,3 +72,4 @@ const CarItem: React.FC<CarItemProps> = ({ car }) => {
 };
 
 export default CarItem;
+

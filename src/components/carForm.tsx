@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import '../components/СarUpdate.css'
-
-
+import '../components/СarUpdate.css';
 
 interface Car {
     id: number;
     name: string;
     color: string;
+    speed: number;
 }
+
 interface CarFormProps {
-    addNewCar: (newCar: Car) => void;
+    addNewCar: (newCar: Omit<Car, 'id'> & { speed: number }) => void;
 }
 
 const CarForm: React.FC<CarFormProps> = ({ addNewCar }) => {
@@ -19,6 +19,7 @@ const CarForm: React.FC<CarFormProps> = ({ addNewCar }) => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
+            // Fetch request to add new car
             const response = await fetch('http://localhost:3000/garage', {
                 method: 'POST',
                 headers: {
@@ -27,8 +28,8 @@ const CarForm: React.FC<CarFormProps> = ({ addNewCar }) => {
                 body: JSON.stringify({ name, color }),
             });
             if (response.ok) {
-                const newCar: Car = await response.json();
-                addNewCar(newCar);
+                const newCar: Omit<Car, 'id'> & { speed: number } = await response.json();
+                addNewCar({ ...newCar, speed: 0 });
                 setName('');
                 setColor('');
             }
@@ -55,10 +56,8 @@ const CarForm: React.FC<CarFormProps> = ({ addNewCar }) => {
             <div className="button-container">
                 <button className="button button-create" type="submit">Create</button>
             </div>
-
         </form>
     );
-
 };
 
 export default CarForm;

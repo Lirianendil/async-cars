@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { Car, Winner, EngineResponse, DriveStatus } from '../components/types';
 
-const BASE_URL = 'http://127.0.0.1:3000';
+
+const BASE_URL = 'http://localhost:3000'; // Адрес вашего API
 
 export const getCar = async (id: number): Promise<Car> => {
     const response = await axios.get(`${BASE_URL}/garage/${id}`);
@@ -72,4 +73,32 @@ export const updateWinner = async (id: number, winner: { wins: number, time: num
 
 export const deleteWinner = async (id: number): Promise<void> => {
     await axios.delete(`${BASE_URL}/winners/${id}`);
+};
+export const resetRace = async (): Promise<void> => {
+    try {
+        const response = await axios.post(`${BASE_URL}/reset-race`);
+        if (response.status === 200) {
+            console.log('Гонка сброшена');
+        } else {
+            console.error('Ошибка сброса гонки:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Ошибка сброса гонки:', error);
+        throw error;
+    }
+};
+
+// Обновляем функцию startRace для принятия аргумента speed
+export const startRace = async (speed: number): Promise<void> => {
+    try {
+        const response = await axios.patch(`${BASE_URL}/start-race?speed=${speed}`);
+        if (response.status === 200) {
+            console.log('Гонка начата для всех машин');
+        } else {
+            console.error('Ошибка запуска гонки:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Ошибка запуска гонки:', error);
+        throw error;
+    }
 };
