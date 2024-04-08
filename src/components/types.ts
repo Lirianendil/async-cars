@@ -1,7 +1,7 @@
 export interface Car {
     id: number,
-    velocity: number,
-    distance: number ,
+    velocity?: number,
+    distance?: number ,
     name: string,
     color: string,
 }

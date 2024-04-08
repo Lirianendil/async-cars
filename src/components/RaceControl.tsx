@@ -3,8 +3,8 @@ import { driveCar, stopEngine } from '../api/api';
 
 interface Car {
     id: number;
-    velocity: number;
-    distance: number;
+    velocity?: number;
+    distance?: number;
     name: string;
     color: string;
 }
@@ -29,17 +29,7 @@ const RaceControl: React.FC<{ cars: Car[] }> = ({ cars }) => {
         setRaceStatus('stopped');
     };
 
-    const stopRace = async () => {
-        setRaceStatus('stopped');
-        cars.forEach(async (car: Car) => {
-            try {
-                const result = await stopEngine(car.id);
-                console.log(result);
-            } catch (error) {
-                console.error(error);
-            }
-        });
-    };
+
 
     const resetRace = async () => {
         const stopPromises = cars.map(car => stopEngine(car.id));
@@ -52,12 +42,6 @@ const RaceControl: React.FC<{ cars: Car[] }> = ({ cars }) => {
 
     return (
         <div>
-            <button onClick={startRace} disabled={raceStatus === 'running'}>
-                Запустить гонку
-            </button>
-            <button onClick={stopRace} disabled={raceStatus === 'stopped'}>
-                Остановить гонку
-            </button>
             <button onClick={resetRace}>
                 Сбросить гонку
             </button>
