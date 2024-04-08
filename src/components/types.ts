@@ -1,9 +1,11 @@
 export interface Car {
-    id: number;
-    name: string;
-    color: string;
-    speed: number
+    id: number,
+    velocity: number,
+    distance: number ,
+    name: string,
+    color: string,
 }
+
 
 export interface Winner {
     id: number;
@@ -13,7 +15,7 @@ export interface Winner {
 
 export interface EngineResponse {
     velocity: number;
-    distance: number;
+    distance: 500000;
 }
 
 export interface DriveStatus {

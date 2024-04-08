@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import CarForm from '../components/carForm';
 import CarUpdateForm from '../components/CarUpdateForm';
 import CarList from '../components/CarList';
-import { getCars, startRace, resetRace } from '../api/api';
+import { getCars } from '../api/api';
+import RaceControl  from '../components/RaceControl'; // Import startRace and resetRace from RaceControl
 import './СarUpdate.css';
 import { Car } from "./types";
-import { ResetButton } from './ResetButton';
-import { RaceButton } from "./RaceButton";
 
 const Garage: React.FC = () => {
     const [cars, setCars] = useState<Car[]>([]);
     const [editingCar, setEditingCar] = useState<Car | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const carsPerPage = 7;
+
 
     useEffect(() => {
         const fetchCars = async () => {
@@ -36,7 +36,7 @@ const Garage: React.FC = () => {
         const maxId = cars.reduce((max, car) => Math.max(max, car.id), 0);
         const newId = maxId + 1 <= 100 ? maxId + 1 : 1;
         const carWithId = { ...newCar, id: newId };
-        setCars((currentCars) => [...currentCars, carWithId]);
+        setCars(currentCars => [...currentCars, carWithId]);
     };
 
     const updateCarList = (updatedCar: Car) => {
@@ -56,6 +56,11 @@ const Garage: React.FC = () => {
         const getRandomColor = () => {
             return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
         };
+        const getRandomVelocity = () => {
+            return Math.max(50, Math.random() * 200);
+        };
+
+        const initialDistance = 0;
 
         const randomCars = Array.from({ length: 100 }, (_, index) => {
             const brand = brands[Math.floor(Math.random() * brands.length)];
@@ -63,34 +68,17 @@ const Garage: React.FC = () => {
                 id: Date.now() + index,
                 name: `${brand}`,
                 color: getRandomColor(),
-                speed: 0 // Add a default value for speed to fix the TypeScript error
+                velocity: getRandomVelocity(),
+                distance: initialDistance
+
             };
         });
 
         setCars(randomCars);
     };
 
-    const handleStartRace = async () => {
-        try {
-            const speed = 100; // Example speed, adjust as needed
-            await startRace(speed);
-        } catch (error) {
-            console.error('Failed to start race:', error);
-        }
-    };
-
-    const handleResetRace = async () => {
-        try {
-            await resetRace(); // Call the resetRace function
-        } catch (error) {
-            console.error('Failed to reset race:', error);
-        }
-    };
-
     return (
         <div>
-            <ResetButton onReset={handleResetRace} />
-            <RaceButton onStartRace={handleStartRace} cars={currentCars} />
             <CarForm addNewCar={addNewCar} />
             <button onClick={generateRandomCars}>Generate 100 Random Cars</button>
             <CarList cars={currentCars} />
@@ -99,6 +87,7 @@ const Garage: React.FC = () => {
                 <span>Page {currentPage} of {pageCount}</span>
                 <button disabled={currentPage === pageCount} onClick={() => changePage(currentPage + 1)}>Next</button>
             </div>
+            <RaceControl cars={cars} /> {/* Использование RaceControl */}
             {editingCar && (
                 <CarUpdateForm
                     car={editingCar}
