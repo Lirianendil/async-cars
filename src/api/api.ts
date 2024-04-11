@@ -1,4 +1,3 @@
-// api.ts
 import axios from 'axios';
 import { Car, Winner, EngineResponse, DriveStatus } from '../components/types';
 
@@ -8,9 +7,8 @@ export const getCar = async (id: number): Promise<Car> => {
     const response = await axios.get(`${BASE_URL}/garage/${id}`);
     return response.data;
 };
-
-export const getCars = async (page: number, limit: number = 10): Promise<Car[]> => {
-    const response = await axios.get(`${BASE_URL}/garage?_page=${page}&_limit=${limit}`);
+export const getCars = async (): Promise<Car[]> => {
+    const response = await axios.get(`${BASE_URL}/garage`);
     return response.data;
 };
 export const createCar = async (car: Omit<Car, 'id'>): Promise<Car> => {

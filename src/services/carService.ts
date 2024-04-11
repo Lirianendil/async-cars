@@ -1,4 +1,4 @@
-import { Car } from '../components/types'; // Adjust the import path as needed
+import { Car } from '../components/types';
 
 const BASE_URL = 'http://localhost:3000';
 

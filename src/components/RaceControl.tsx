@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { driveCar, stopEngine } from '../api/api';
+import { stopEngine } from '../api/api';
 
 interface Car {
     id: number;
@@ -10,41 +10,17 @@ interface Car {
 }
 
 const RaceControl: React.FC<{ cars: Car[] }> = ({ cars }) => {
-    const [raceStatus, setRaceStatus] = useState('stopped');
-
-    const startRace = async () => {
-        setRaceStatus('running');
-        const racePromises = cars.map(car => driveCar(car.id));
-
-        const results = await Promise.allSettled(racePromises);
-
-        results.forEach((result, index) => {
-            if (result.status === 'fulfilled') {
-                console.log(`Машина ${cars[index].name} достигла финиша.`);
-            } else {
-                console.log(`Машина ${cars[index].name} остановилась из-за поломки.`);
-            }
-        });
-
-        setRaceStatus('stopped');
-    };
-
-
+    const [raceStatus, setRaceStatus] = useState<'stopped' | 'running'>('stopped');
 
     const resetRace = async () => {
+        setRaceStatus('stopped'); // Установка статуса гонки в "stopped"
         const stopPromises = cars.map(car => stopEngine(car.id));
-
-        await Promise.allSettled(stopPromises);
-
-        console.log('Гонка сброшена, все машины остановлены.');
-        setRaceStatus('stopped');
+        await Promise.all(stopPromises);
     };
 
     return (
         <div>
-            <button onClick={resetRace}>
-                Сбросить гонку
-            </button>
+            <button onClick={resetRace}>Сбросить гонку</button>
         </div>
     );
 };

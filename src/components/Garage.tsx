@@ -14,52 +14,65 @@ const Garage: React.FC = () => {
     const carsPerPage = 7;
 
     useEffect(() => {
-        const fetchCars = async () => {
-            const carsData = await getCars(currentPage);
-            setCars(carsData);
-        };
-
         fetchCars();
-    }, [currentPage]);
+    }, []);
 
-    // Функция для добавления новой машины
+    const fetchCars = async () => {
+        try {
+            const carsData = await getCars(); // Fetch all cars once
+            setCars(carsData);
+        } catch (error) {
+            console.error('Failed to fetch cars:', error);
+        }
+    };
+
     const addNewCar = async (newCarData: Omit<Car, 'id'>) => {
-        // предполагается, что createCar принимает объект без id и возвращает полный объект Car после добавления
-        const newCar = await createCar(newCarData);
-        // Добавить машину в состояние после успешного создания
-        setCars(prevCars => [...prevCars, newCar]);
-    };
-    // Функция для обновления информации о машине
-    const updateCarList = async (carToUpdate: Car) => {
-        const updatedCar = await updateCar(carToUpdate.id, { name: carToUpdate.name, color: carToUpdate.color });
-        setCars(cars.map(car => car.id === updatedCar.id ? updatedCar : car));
+        try {
+            const newCar = await createCar(newCarData);
+            setCars(prevCars => [...prevCars, newCar]);
+        } catch (error) {
+            console.error('Failed to add new car:', error);
+        }
     };
 
-    // Обновленная функция для генерации новых машин
+    const updateCarList = async (carToUpdate: Car) => {
+        try {
+            const updatedCar = await updateCar(carToUpdate.id, { name: carToUpdate.name, color: carToUpdate.color });
+            setCars(cars.map(car => car.id === updatedCar.id ? updatedCar : car));
+        } catch (error) {
+            console.error('Failed to update car:', error);
+        }
+    };
+
     const generateRandomCars = async () => {
         const brands = ['Tesla', 'BMW', 'Mercedes', 'Ford', 'Chevrolet', 'Audi', 'Toyota'];
-        for (let i = 0; i < 100; i++) {
-            const brand = brands[Math.floor(Math.random() * brands.length)];
-            const color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-            const velocity = Math.max(50, Math.random() * 200);
-            const distance = 0; // Устанавливаем расстояние по умолчанию
-            // Создаем объект типа Car без id
-            const newCarData: Omit<Car, "id"> = { name: `${brand} Model`, color, velocity, distance };
-            // Передаем объект в функцию addNewCar
-            await addNewCar(newCarData);
+        const targetCarCount = 100;
+        const currentCarCount = cars.length;
+        const carsToAdd = targetCarCount - currentCarCount;
+
+        if (carsToAdd > 0) {
+            for (let i = 0; i < carsToAdd; i++) {
+                const brand = brands[Math.floor(Math.random() * brands.length)];
+                const color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+                const newCarData: Omit<Car, "id"> = {
+                    name: `${brand} Model ${i + 1}`, color, velocity: Math.max(50, Math.random() * 200), distance: 0
+                };
+                await addNewCar(newCarData);
+            }
+        } else {
+            console.log("The garage already has 100 or more cars.");
         }
-        // Обновляем список машин после генерации
+
         await fetchCars();
     };
-    const fetchCars = async () => {
-        const carsData = await getCars(currentPage);
-        setCars(carsData);
-    };
 
-    // В Garage.tsx
     const startAllCars = async () => {
         for (const car of cars) {
-            await startAndDrive(car.id);
+            try {
+                await startAndDrive(car.id);
+            } catch (error) {
+                console.error('Failed to start car:', error);
+            }
         }
     };
 
