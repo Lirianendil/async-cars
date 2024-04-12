@@ -7,7 +7,6 @@ const SomeOtherComponent = () => {
     return (
         <div>
             <CarComponent color={carColor} />
-            {/* Другой контент */}
         </div>
     );
 };

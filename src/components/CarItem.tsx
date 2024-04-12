@@ -5,9 +5,10 @@ import { Car as CarType } from './types';
 
 interface CarItemProps {
     car: CarType;
+    onSelect: (car: CarType) => void;
 }
 
-const CarItem: React.FC<CarItemProps> = ({ car }) => {
+const CarItem: React.FC<CarItemProps> = ({ car, onSelect }) => {
     const [engineStatus, setEngineStatus] = useState<'stopped' | 'started' | 'driving'>('stopped');
 
     useEffect(() => {
@@ -64,6 +65,7 @@ const CarItem: React.FC<CarItemProps> = ({ car }) => {
                     disabled={engineStatus === 'stopped'}>
                     Stop Engine
                 </button>
+                <button onClick={() => onSelect(car)}>Выбрать</button>
             </div>
         </div>
     );

@@ -12,13 +12,15 @@ export const getCars = async (): Promise<Car[]> => {
     return response.data;
 };
 export const createCar = async (car: Omit<Car, 'id'>): Promise<Car> => {
-    const response = await axios.post(`${BASE_URL}/garage`, car);
-    if (response.status === 201) {
+    try {
+        const response = await axios.post(`${BASE_URL}/garage`, car);
         return response.data;
-    } else {
-        throw new Error('Error creating car');
+    } catch (error) {
+        console.error('Error creating car:', error);
+        throw error;  // Прокидываем ошибку выше, чтобы можно было её обработать в компоненте
     }
 };
+
 
 
 

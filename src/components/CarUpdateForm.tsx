@@ -29,21 +29,24 @@ const CarUpdateForm: React.FC<CarUpdateFormProps> = ({ car, show, onClose, updat
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         const updatedCar = { ...car, name, color };
 
-        const response = await fetch(`http://localhost:3000/garage/${car.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedCar),
-        });
+        try {
+            const response = await fetch(`http://localhost:3000/garage/${car.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedCar),
+            });
 
-        if (response.ok) {
+            if (!response.ok) {
+                throw new Error('Failed to update the car with status: ' + response.status);
+            }
+
             const result = await response.json();
             updateCarList(result);
             onClose();
-        } else {
-            console.error('Failed to update the car');
+        } catch (error) {
+            console.error('Failed to update the car:', error);
         }
     };
 

@@ -13,7 +13,7 @@ const RaceControl: React.FC<{ cars: Car[] }> = ({ cars }) => {
     const [raceStatus, setRaceStatus] = useState<'stopped' | 'running'>('stopped');
 
     const resetRace = async () => {
-        setRaceStatus('stopped'); // Установка статуса гонки в "stopped"
+        setRaceStatus('stopped');
         const stopPromises = cars.map(car => stopEngine(car.id));
         await Promise.all(stopPromises);
     };

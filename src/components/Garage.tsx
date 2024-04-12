@@ -9,10 +9,9 @@ import { Car } from './types';
 
 const Garage: React.FC = () => {
     const [cars, setCars] = useState<Car[]>([]);
-    const [editingCar, setEditingCar] = useState<Car | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const carsPerPage = 7;
-
+    const [selectedCar, setSelectedCar] = useState<Car | null>(null);
     useEffect(() => {
         fetchCars();
     }, []);
@@ -26,14 +25,15 @@ const Garage: React.FC = () => {
         }
     };
 
-    const addNewCar = async (newCarData: Omit<Car, 'id'>) => {
+    const addNewCar = async (carData: Omit<Car, 'id'>) => {
         try {
-            const newCar = await createCar(newCarData);
+            const newCar = await createCar(carData);
             setCars(prevCars => [...prevCars, newCar]);
         } catch (error) {
             console.error('Failed to add new car:', error);
         }
     };
+
 
     const updateCarList = async (carToUpdate: Car) => {
         try {
@@ -76,12 +76,16 @@ const Garage: React.FC = () => {
         }
     };
 
+    const handleSelectCar = (car: Car) => {
+        setSelectedCar(car);
+    };
+
     return (
         <div>
             <CarForm addNewCar={addNewCar} />
             <button onClick={generateRandomCars}>Generate 100 Random Cars</button>
-            {editingCar && <CarUpdateForm car={editingCar} show={Boolean(editingCar)} onClose={() => setEditingCar(null)} updateCarList={updateCarList} />}
-            <CarList cars={cars.slice((currentPage - 1) * carsPerPage, currentPage * carsPerPage)} />
+            {selectedCar && <CarUpdateForm car={selectedCar} show={Boolean(selectedCar)} onClose={() => setSelectedCar(null)} updateCarList={updateCarList} />}
+            <CarList cars={cars.slice((currentPage - 1) * carsPerPage, currentPage * carsPerPage)} onSelect={handleSelectCar} />
             <div className="pagination">
                 <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>Prev</button>
                 <span>Page {currentPage} of {Math.ceil(cars.length / carsPerPage)}</span>
