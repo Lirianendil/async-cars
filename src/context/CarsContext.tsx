@@ -12,7 +12,7 @@ interface Props {
 const Car: React.FC<Props> = ({ car, onUpdate, onRemove }) => {
     const handleStart = async () => {
         try {
-            const success = await startAndDrive(car.id);
+            const {success} = await startAndDrive(car.id);
             if (success) {
                 console.log('Engine started successfully');
                 // Here you could update the UI or provide feedback to the user

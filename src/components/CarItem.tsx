@@ -3,13 +3,16 @@ import './СarUpdate.css';
 import CarComponent from "./CarComponent";
 import { Car as CarType } from './types';
 
+
 interface CarItemProps {
     car: CarType;
     onSelect: (car: CarType) => void;
+    carDistance: number;
 }
 
-const CarItem: React.FC<CarItemProps> = ({ car, onSelect }) => {
+const CarItem: React.FC<CarItemProps> = ({ car, onSelect, carDistance }) => {
     const [engineStatus, setEngineStatus] = useState<'stopped' | 'started' | 'driving'>('stopped');
+    const [distance, setDistance] = useState(0);
 
     useEffect(() => {
         if (car) {
@@ -31,6 +34,8 @@ const CarItem: React.FC<CarItemProps> = ({ car, onSelect }) => {
             const contentType = response.headers.get('content-type');
             if (contentType && contentType.includes('application/json')) {
                 const data = await response.json();
+                car.velocity = data.velocity;
+                car.distance = data.distance;
                 if (response.status >= 400) {
                     throw new Error(data.message);
                 }
@@ -42,6 +47,8 @@ const CarItem: React.FC<CarItemProps> = ({ car, onSelect }) => {
             if (action === 'started' || action === 'drive') {
                 setEngineStatus('driving');
             } else {
+                car.distance = 0;
+                car.velocity = 0;
                 setEngineStatus('stopped');
             }
         } catch (error) {
@@ -51,8 +58,11 @@ const CarItem: React.FC<CarItemProps> = ({ car, onSelect }) => {
     };
 
     return (
-        <div className={`car-item ${engineStatus === 'driving' ? 'car-moving' : ''}`}>
-            <CarComponent color={car.color} />
+        <div className={`car-item ${engineStatus === 'driving' ? 'car-moving' : ''}`} >
+            {car.distance}
+            <div  style={{ transform: `translateX(${(car?.distance / car?.velocity)}px)`, transition: 'transform 2s linear' }}>
+                <CarComponent color={car.color} />
+            </div>
             <div>
                 <button
                     onClick={() => handleEngineAction('started')}

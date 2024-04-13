@@ -1,4 +1,4 @@
-    import React, { useState } from 'react';
+    import React, { useState} from 'react';
     import '../components/СarUpdate.css'
 
 
@@ -17,39 +17,25 @@
     const CarForm: React.FC<CarFormProps> = ({ addNewCar }) => {
         const [name, setName] = useState('');
         const [color, setColor] = useState('');
-        const [error, setError] = useState('');
+
 
         const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
+            const newCar = { name, color };
             try {
-                const response = await fetch('http://localhost:3000/garage', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, color }),
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const newCar = await response.json();
-                addNewCar(newCar);
+                await addNewCar(newCar);
                 setName('');
                 setColor('');
             } catch (error) {
                 console.error('Failed to create new car:', error);
-                setError('Failed to create car');
             }
         };
 
         return (
             <form onSubmit={handleSubmit}>
-                <input type="text" name="name" placeholder="Name of the car" value={name} onChange={(e) => setName(e.target.value)} />
-                <input type="color" name="color" value={color} onChange={(e) => setColor(e.target.value)} />
-                <div className="button-container">
-                    <button className="button button-create" type="submit">Create</button>
-                </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <input type="text" name="name" placeholder="Name of the car" value={name} onChange={e => setName(e.target.value)} />
+                <input type="color" name="color" value={color} onChange={e => setColor(e.target.value)} />
+                <button type="submit">Create</button>
             </form>
         );
     };

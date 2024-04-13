@@ -6,6 +6,7 @@ import RaceControl from '../components/RaceControl';
 import { getCars, createCar, startAndDrive, updateCar } from '../api/api';
 import '../components/СarUpdate.css';
 import { Car } from './types';
+import './СarUpdate.css';
 
 const Garage: React.FC = () => {
     const [cars, setCars] = useState<Car[]>([]);
@@ -18,7 +19,7 @@ const Garage: React.FC = () => {
 
     const fetchCars = async () => {
         try {
-            const carsData = await getCars(); // Fetch all cars once
+            const carsData = await getCars();
             setCars(carsData);
         } catch (error) {
             console.error('Failed to fetch cars:', error);
@@ -29,16 +30,17 @@ const Garage: React.FC = () => {
         try {
             const newCar = await createCar(carData);
             setCars(prevCars => [...prevCars, newCar]);
+            fetchCars();
         } catch (error) {
             console.error('Failed to add new car:', error);
         }
     };
 
-
     const updateCarList = async (carToUpdate: Car) => {
         try {
             const updatedCar = await updateCar(carToUpdate.id, { name: carToUpdate.name, color: carToUpdate.color });
             setCars(cars.map(car => car.id === updatedCar.id ? updatedCar : car));
+            fetchCars();
         } catch (error) {
             console.error('Failed to update car:', error);
         }
@@ -69,7 +71,9 @@ const Garage: React.FC = () => {
     const startAllCars = async () => {
         for (const car of cars) {
             try {
-                await startAndDrive(car.id);
+               const response = await startAndDrive(car.id);
+               car.distance = response.engineRes.distance;
+               car.velocity = response.engineRes.velocity;
             } catch (error) {
                 console.error('Failed to start car:', error);
             }
@@ -81,7 +85,7 @@ const Garage: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className="garage">
             <CarForm addNewCar={addNewCar} />
             <button onClick={generateRandomCars}>Generate 100 Random Cars</button>
             {selectedCar && <CarUpdateForm car={selectedCar} show={Boolean(selectedCar)} onClose={() => setSelectedCar(null)} updateCarList={updateCarList} />}

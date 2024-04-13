@@ -14,12 +14,23 @@ export const getCars = async (): Promise<Car[]> => {
 export const createCar = async (car: Omit<Car, 'id'>): Promise<Car> => {
     try {
         const response = await axios.post(`${BASE_URL}/garage`, car);
-        return response.data;
+        if (response.status === 201) {
+            return response.data;
+        } else {
+            throw new Error('Непредвиденный статус ответа: ' + response.status);
+        }
     } catch (error) {
-        console.error('Error creating car:', error);
-        throw error;  // Прокидываем ошибку выше, чтобы можно было её обработать в компоненте
+        if (axios.isAxiosError(error)) {
+            console.error('Ошибка при создании автомобиля:', error.response?.data || error.message);
+            alert('Ошибка при создании автомобиля: ' + (error.response?.data.message || error.message));
+        } else {
+            console.error('Неожиданная ошибка:', error);
+            alert('Неожиданная ошибка при создании автомобиля');
+        }
+        throw error;
     }
 };
+
 
 
 
@@ -43,12 +54,12 @@ export const createCar = async (car: Omit<Car, 'id'>): Promise<Car> => {
         return response.data;
     };
 
-    export const startAndDrive = async (id: number): Promise<boolean> => {
+    export const startAndDrive = async (id: number): Promise<any> => {
         try {
-            await startEngine(id);
-            await driveCar(id);
-            console.log('Engine started and car is driving');
-            return true; // Возвращаем true в случае успешного запуска и движения
+            const engineRes = await startEngine(id);
+            const carDriveRes = await driveCar(id);
+
+            return {success: true, engineRes, carDriveRes}; // Возвращаем true в случае успешного запуска и движения
         } catch (error) {
             console.error('Error occurred while starting or driving the car:', error);
             return false; // Возвращаем false в случае ошибки

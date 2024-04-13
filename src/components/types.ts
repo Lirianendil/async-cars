@@ -1,9 +1,10 @@
 export interface Car {
     id: number,
-    velocity?: number,
-    distance?: number ,
+    velocity?: any,
+    distance?: any ,
     name: string,
     color: string,
+    isMoving?: boolean,
 }
 
 
