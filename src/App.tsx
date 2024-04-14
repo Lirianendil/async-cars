@@ -14,9 +14,21 @@ const App = () => {
     return (
         <Router>
             <div>
-                <nav style={{ marginBottom: '16px' }}>
-                    <Link to="/garage" style={{ marginRight: '10px' }}>Garage</Link>
-                    <Link to="/winners">Winners</Link>
+                <nav style={{
+                    marginBottom: '16px',
+                    marginTop: '20px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '50%'
+                }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-around', width: '50%' }}>
+                        <Link to="/garage" style={{
+                            marginTop: '10px'
+                        }}>Garage</Link>
+                        <Link to="/winners" style={{
+                            marginTop: '10px'
+                        }}>Winners</Link>
+                    </div>
                 </nav>
                 <Routes>
                     <Route path="/" element={<Navigate replace to="/garage" />} />
@@ -27,5 +39,6 @@ const App = () => {
         </Router>
     );
 };
+
 
 export default App;

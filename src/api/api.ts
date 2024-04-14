@@ -99,10 +99,10 @@ export const startAndDrive = async (id: number): Promise<CarStatusType> => {
             distance: engineRes.distance,
             time: engineRes.distance / engineRes.velocity,
             success: driveRes.success,
-        }; // Возвращаем true в случае успешного запуска и движения
+        };
     } catch (error) {
         console.log("Error occurred while starting or driving the car:", error);
-        return { id, success: false }; // Возвращаем false в случае ошибки
+        return { id, success: false };
     }
 };
 
@@ -114,10 +114,9 @@ export const driveCar = async (id: number): Promise<DriveStatus> => {
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-            // Handle the specific error response here if needed
             return error.response.data;
         }
-        throw error; // If it's not an AxiosError, rethrow it
+        throw error;
     }
 };
 

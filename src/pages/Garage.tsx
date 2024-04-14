@@ -157,7 +157,9 @@ const Garage: React.FC = () => {
 
             <div>
                 <CarForm addNewCar={addNewCar} />
-                <button onClick={generateRandomCars}>Generate 100 Random Cars</button>
+                <button
+                    onClick={generateRandomCars}
+                    style={{ marginLeft: '80px' }} >Generate 100 Random Cars</button>
                 {selectedCar && (
                     <CarUpdateForm
                         car={selectedCar}
@@ -180,16 +182,21 @@ const Garage: React.FC = () => {
                     carStatusList={raceIsStarted ? carStatusList : []}
                     fetchCars={fetchCars}
                 />
-                <div className="pagination">
+                <div className="pagination" style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingLeft: '100px'
+                }}>
                     <button
                         disabled={currentPage === 1}
                         onClick={() => setCurrentPage(currentPage - 1)}
                     >
                         Prev
                     </button>
-                    <span>
-            Page {currentPage} of {Math.ceil(pages / carsPerPage)}
-          </span>
+                    <span style={{ margin: '0 10px' }}>
+                        Page {currentPage} of {Math.ceil(pages / carsPerPage)}
+            </span>
                     <button
                         disabled={currentPage === Math.ceil(pages / carsPerPage)}
                         onClick={() => setCurrentPage(currentPage + 1)}

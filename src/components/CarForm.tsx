@@ -28,21 +28,27 @@ const CarForm: React.FC<CarFormProps> = ({ addNewCar }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                name="name"
-                placeholder="Name of the car"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-            />
-            <input
-                type="color"
-                name="color"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-            />
-            <button type="submit">Create</button>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '20px' }}>
+            <div style={{ marginLeft: '100px', display: 'flex', justifyContent: 'space-between', width: 'auto', alignItems: 'center' }}>
+                <div> {/* Grouping inputs together */}
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Name of the car"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        style={{ marginBottom: '10px', marginRight: '10px', width: '300px' }}
+                    />
+                    <input
+                        type="color"
+                        name="color"
+                        value={color}
+                        onChange={(e) => setColor(e.target.value)}
+                        style={{ marginBottom: '5px', marginRight: '20px', width: '60px' }}
+                    />
+                </div>
+                <button type="submit" style={{ width: '100px' }}>Create</button>
+            </div>
         </form>
     );
 };
