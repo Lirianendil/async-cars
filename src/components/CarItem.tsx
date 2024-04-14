@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CarComponent from "./CarComponent";
 import { CarStatusType, Car as CarType } from "./types";
-import {deleteCar, getCars, startAndDrive, stopEngine} from "../api/api";
-import { time } from "console";
+import {deleteCar,  startAndDrive, stopEngine} from "../api/api";
+
 
 interface CarItemProps {
     car: CarType;
