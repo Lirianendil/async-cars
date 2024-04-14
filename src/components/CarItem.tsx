@@ -1,81 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import './СarUpdate.css';
+import React, { useState, useEffect } from "react";
 import CarComponent from "./CarComponent";
-import { Car as CarType } from './types';
-
+import { CarStatusType, Car as CarType } from "./types";
+import {deleteCar, getCars, startAndDrive, stopEngine} from "../api/api";
+import { time } from "console";
 
 interface CarItemProps {
     car: CarType;
+    carStatus: CarStatusType;
     onSelect: (car: CarType) => void;
-    carDistance: number;
+    onRemove?: (id: number) => void;
+    fetchCars: () => void
 }
 
-const CarItem: React.FC<CarItemProps> = ({ car, onSelect, carDistance }) => {
-    const [engineStatus, setEngineStatus] = useState<'stopped' | 'started' | 'driving'>('stopped');
-    const [distance, setDistance] = useState(0);
+const CarItem: React.FC<CarItemProps> = ({ car, fetchCars, carStatus, onSelect , onRemove }) => {
+    const [engineStatus, setEngineStatus] = useState<
+        "stopped" | "started" | "driving"
+    >("stopped");
+
+    const [carStatusState, setCarStatusState] = useState<CarStatusType | null>(carStatus)
 
     useEffect(() => {
         if (car) {
-            setEngineStatus('stopped');
+            setEngineStatus("stopped");
         }
     }, [car]);
 
-    const handleEngineAction = async (action: 'start' | 'stop' | 'drive' | 'started') => {
+    useEffect(() => {
+        setCarStatusState(carStatus)
+    }, [carStatus]);
+
+
+    const handleEngineAction = async (
+        action: "start" | "stop" | "drive" | "started"
+    ) => {
         try {
             if (!car) {
-                console.error('Car information is not available');
+                console.error("Car information is not available");
                 return;
             }
 
-            const response = await fetch(`http://localhost:3000/engine?id=${car.id}&status=${action}`, {
-                method: 'PATCH',
-            });
-
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('application/json')) {
-                const data = await response.json();
-                car.velocity = data.velocity;
-                car.distance = data.distance;
-                if (response.status >= 400) {
-                    throw new Error(data.message);
-                }
+            if (action === "started") {
+                const status = await startAndDrive(car.id);
+                setEngineStatus("driving");
+                setCarStatusState(status)
             } else {
-                const data = await response.text();
-                throw new Error(data);
-            }
-
-            if (action === 'started' || action === 'drive') {
-                setEngineStatus('driving');
-            } else {
-                car.distance = 0;
-                car.velocity = 0;
-                setEngineStatus('stopped');
+                await stopEngine(car.id);
+                setEngineStatus("stopped");
+                setCarStatusState(null);
             }
         } catch (error) {
             console.error(`Failed to ${action} the engine: `, error);
-            setEngineStatus('stopped');
+            setEngineStatus("stopped");
+        }
+    };
+
+    const handleDelete = async () => {
+        try {
+           await deleteCar(car.id)
+           await fetchCars()
+        } catch (error) {
+            console.error("Failed to delete the car:", error);
         }
     };
 
     return (
-        <div className={`car-item ${engineStatus === 'driving' ? 'car-moving' : ''}`} >
-            {car.distance}
-            <div  style={{ transform: `translateX(${(car?.distance / car?.velocity)}px)`, transition: 'transform 2s linear' }}>
-                <CarComponent color={car.color} />
+        <div>
+            <div className="car-track">
+                <div className="car-track-name">{car.name}</div>
+                <div
+                    className={`car ${carStatusState?.success ? "car-right" : "car-left"}`}
+                    style={{
+                        transition: `margin-left ${
+                            carStatusState?.time ? carStatusState?.time + "ms" : "0s"
+                        } linear`,
+                    }}
+                >
+                        <CarComponent color={car.color}/>
+                </div>
             </div>
             <div>
-                <button
-                    onClick={() => handleEngineAction('started')}
-                    disabled={engineStatus !== 'stopped'}>
+                <button onClick={() => handleEngineAction("started")} disabled={engineStatus !== "stopped"}>
                     Start Engine
                 </button>
-
-                <button
-                    onClick={() => handleEngineAction('stop')}
-                    disabled={engineStatus === 'stopped'}>
+                <button onClick={() => handleEngineAction("stop")} disabled={engineStatus === "stopped"}>
                     Stop Engine
                 </button>
-                <button onClick={() => onSelect(car)}>Выбрать</button>
+                <button onClick={() => onSelect(car)}>Select</button>
+                <button onClick={handleDelete}>Remove</button>
             </div>
         </div>
     );

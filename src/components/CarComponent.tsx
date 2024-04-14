@@ -1,6 +1,5 @@
-import React from 'react';
-import { ReactComponent as CarSvg } from '../images/1918554.svg'
-import './СarUpdate.css';
+import React from "react";
+import { ReactComponent as CarSvg } from "../images/1918554.svg";
 
 interface CarComponentProps {
     color: string;

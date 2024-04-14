@@ -1,22 +1,29 @@
-import React from 'react';
-import CarItem from './CarItem';
-import { Car } from './types';
-import carItem from "./CarItem";
-import './СarUpdate.css';
+import React from "react";
+import CarItem from "./CarItem";
+import { Car, CarStatusType } from "./types";
 
 interface CarListProps {
     cars: Car[];
+    carStatusList: CarStatusType[];
     onSelect: (car: Car) => void;
+    onRemove?: (id: number) => void;
+    fetchCars: () => void
 }
 
-const CarList: React.FC<CarListProps> = ({ cars, onSelect }) => {
+const CarList: React.FC<CarListProps> = ({ cars, carStatusList, fetchCars, onSelect, onRemove }) => {
     return (
-        <div>
-            {cars.map(car => (
-                <div className="car-road">
-                    <CarItem key={car.id} car={car} onSelect={onSelect} carDistance={(car.distance/car.velocity)}/>
-
-                </div>
+        <div className="car-list">
+            {cars.map((car) => (
+                <CarItem
+                    key={car.id}
+                    car={car}
+                    onSelect={onSelect}
+                    fetchCars={fetchCars}
+                    // onRemove={onRemove}
+                    carStatus={
+                        carStatusList.find((el) => el.id === car.id) as CarStatusType
+                    }
+                />
             ))}
         </div>
     );

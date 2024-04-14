@@ -1,8 +1,8 @@
-import React from 'react';
-import CarComponent from '../components/CarComponent';
+import React from "react";
+import CarComponent from "../components/CarComponent";
 
 const SomeOtherComponent = () => {
-    const carColor = '#ff0000';
+    const carColor = "#ff0000";
 
     return (
         <div>
