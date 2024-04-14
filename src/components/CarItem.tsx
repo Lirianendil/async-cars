@@ -80,13 +80,13 @@ const CarItem: React.FC<CarItemProps> = ({ car, fetchCars, carStatus, onSelect ,
             </div>
             <div>
                 <button onClick={() => handleEngineAction("started")} disabled={engineStatus !== "stopped"}>
-                    Start Engine
+                    Start
                 </button>
-                <button onClick={() => handleEngineAction("stop")} disabled={engineStatus === "stopped"}>
-                    Stop Engine
+                <button className="stop-btn" onClick={() => handleEngineAction("stop")} disabled={engineStatus === "stopped"}>
+                    Stop
                 </button>
-                <button onClick={() => onSelect(car)}>Select</button>
-                <button onClick={handleDelete}>Remove</button>
+                <button className="sec-btn" onClick={() => onSelect(car)}>Select</button>
+                <button className="rem-btn" onClick={handleDelete}>Remove</button>
             </div>
         </div>
     );

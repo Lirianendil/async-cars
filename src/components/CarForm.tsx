@@ -29,8 +29,8 @@ const CarForm: React.FC<CarFormProps> = ({ addNewCar }) => {
 
     return (
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '20px' }}>
-            <div style={{ marginLeft: '100px', display: 'flex', justifyContent: 'space-between', width: 'auto', alignItems: 'center' }}>
-                <div> {/* Grouping inputs together */}
+            <div style={{display: 'flex', justifyContent: 'space-between', width: 'auto', alignItems: 'center', flexDirection: "column" }}>
+                <div style={{display:"flex"}}>
                     <input
                         type="text"
                         name="name"

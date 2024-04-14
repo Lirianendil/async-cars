@@ -15,17 +15,13 @@ const Car: React.FC<Props> = ({ car, onUpdate, onRemove }) => {
             const {success} = await startAndDrive(car.id);
             if (success) {
                 console.log('Engine started successfully');
-                // Here you could update the UI or provide feedback to the user
             } else {
                 console.error('Failed to start engine for car:', car.id);
             }
         } catch (error) {
-            // Using type assertion to narrow down the type of the error
             if (error instanceof Error) {
-                // Now it's safe to access the error.message property
                 console.error('Error occurred while starting or driving the car:', error.message);
             } else {
-                // Handle non-Error objects or unknown errors
                 console.error('An unknown error occurred while starting or driving the car:', error);
             }
         }

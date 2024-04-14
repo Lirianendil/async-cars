@@ -155,11 +155,14 @@ const Garage: React.FC = () => {
                 </div>
             )}
 
-            <div>
+            <div className="page">
                 <CarForm addNewCar={addNewCar} />
-                <button
-                    onClick={generateRandomCars}
-                    style={{ marginLeft: '80px' }} >Generate 100 Random Cars</button>
+                <div style={{display: "flex", justifyContent: "center"}}>
+                    <button
+                        onClick={generateRandomCars}
+                        >Generate 100 Random Cars
+                    </button>
+                </div>
                 {selectedCar && (
                     <CarUpdateForm
                         car={selectedCar}
@@ -185,8 +188,7 @@ const Garage: React.FC = () => {
                 <div className="pagination" style={{
                     display: 'flex',
                     justifyContent: 'center',
-                    alignItems: 'center',
-                    paddingLeft: '100px'
+                    marginTop: '50px'
                 }}>
                     <button
                         disabled={currentPage === 1}
@@ -195,7 +197,7 @@ const Garage: React.FC = () => {
                         Prev
                     </button>
                     <span style={{ margin: '0 10px' }}>
-                        Page {currentPage} of {Math.ceil(pages / carsPerPage)}
+                Page {currentPage} of {Math.ceil(pages / carsPerPage)}
             </span>
                     <button
                         disabled={currentPage === Math.ceil(pages / carsPerPage)}
@@ -204,8 +206,13 @@ const Garage: React.FC = () => {
                         Next
                     </button>
                 </div>
-                <div>
-                    <h2>Start All Cars</h2>
+                <div style={{
+                    display:"flex",
+                    justifyContent: "center",
+                    marginTop: '50px',
+                    textAlign: 'left',
+                    alignItems: "center"
+                }}>
                     <button onClick={startAllCars}>Start All Cars</button>
                     <button onClick={stopRace}>Stop the race</button>
                 </div>

@@ -212,5 +212,17 @@ button:hover::before {
 }
 
 .car-list {
-  margin: 0 50px;
+  margin-top: 50px;
+}
+
+.page {
+  margin: 50px;
+}
+.stop-btn {
+  background-color: #ff4b2b;
+}
+.sec-btn {
+  background-color: #61dafb ;
+}
+.rem-btn { background-color: red;
 }

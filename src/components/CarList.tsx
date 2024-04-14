@@ -19,7 +19,6 @@ const CarList: React.FC<CarListProps> = ({ cars, carStatusList, fetchCars, onSel
                     car={car}
                     onSelect={onSelect}
                     fetchCars={fetchCars}
-                    // onRemove={onRemove}
                     carStatus={
                         carStatusList.find((el) => el.id === car.id) as CarStatusType
                     }

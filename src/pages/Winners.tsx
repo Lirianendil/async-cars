@@ -14,7 +14,7 @@ const Winners = () => {
         fetchWinners();
     }, []);
     return (
-        <div>
+        <div className="page">
             {winners?.map((winner) => (
                 <div key={winner.id}>
                     {winner.id}, {winner.time}
